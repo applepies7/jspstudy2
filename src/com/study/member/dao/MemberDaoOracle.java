@@ -10,13 +10,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.study.common.sql.CommonSQL;
 import com.study.member.vo.MemberSearchVO;
 import com.study.member.vo.MemberVO;
 
 public class MemberDaoOracle implements IMemberDao {
 
-	
-	
 	@Override
 	public int getMemberCount(MemberSearchVO searchVO) throws SQLException {
 
@@ -32,8 +31,7 @@ public class MemberDaoOracle implements IMemberDao {
 			sb.append("   from   member ");
 			sb.append("  where mem_del_yn = 'N'  ");
 //			if (freeSearchVO.getSearchWord() != null && !freeSearchVO.getSearchWord().isEmpty()) {
-			if (StringUtils.isNotBlank(searchVO.getSearchWord())
-					&& StringUtils.isNotBlank(searchVO.getSearchWord())) {
+			if (StringUtils.isNotBlank(searchVO.getSearchWord()) && StringUtils.isNotBlank(searchVO.getSearchWord())) {
 				switch (searchVO.getSearchType()) {
 				case "ID":
 					sb.append("  and mem_id like '%'|| ? ||'%'  ");
@@ -54,14 +52,13 @@ public class MemberDaoOracle implements IMemberDao {
 			pstmt = conn.prepareStatement(sb.toString());
 			int idx = 1;
 
-			if (StringUtils.isNotBlank(searchVO.getSearchWord())
-					&& StringUtils.isNotBlank(searchVO.getSearchWord()))		{
-				if(searchVO.getSearchType().equals("ADD")) {
-						pstmt.setString(idx++, searchVO.getSearchWord());
-						pstmt.setString(idx++, searchVO.getSearchWord());
+			if (StringUtils.isNotBlank(searchVO.getSearchWord()) && StringUtils.isNotBlank(searchVO.getSearchWord())) {
+				if (searchVO.getSearchType().equals("ADD")) {
+					pstmt.setString(idx++, searchVO.getSearchWord());
+					pstmt.setString(idx++, searchVO.getSearchWord());
 				}
 				pstmt.setString(idx++, searchVO.getSearchWord());
-				
+
 			}
 
 			if (StringUtils.isNotBlank(searchVO.getSearchJob())) {
@@ -101,8 +98,6 @@ public class MemberDaoOracle implements IMemberDao {
 
 	}
 
-	
-	
 	@Override
 	public List<MemberVO> getMemberList(MemberSearchVO searchVO) throws SQLException {
 		Connection conn = null; // 커넥션 티켓
@@ -113,9 +108,7 @@ public class MemberDaoOracle implements IMemberDao {
 		try {
 
 			conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:study");
-			sb.append(" select *								");
-           sb.append("  from( select a.*, ROWNUM rnum   ");
-           sb.append("  from(                            ");
+			sb.append(CommonSQL.PRE_PAGEING_QRY);
 			sb.append(" select member.mem_id	");
 			sb.append("	, member.mem_name		");
 			sb.append("	, member.mem_add1		");
@@ -128,8 +121,7 @@ public class MemberDaoOracle implements IMemberDao {
 			sb.append("where member.mem_like = comm_code.comm_cd	");
 			sb.append("and member.mem_job = c.comm_cd	");
 			sb.append("  and mem_del_yn = 'N' ");
-			if (StringUtils.isNotBlank(searchVO.getSearchWord())
-					&& StringUtils.isNotBlank(searchVO.getSearchWord())) {
+			if (StringUtils.isNotBlank(searchVO.getSearchWord()) && StringUtils.isNotBlank(searchVO.getSearchWord())) {
 				switch (searchVO.getSearchType()) {
 				case "ID":
 					sb.append("  and mem_id like '%'|| ? ||'%'  ");
@@ -143,32 +135,24 @@ public class MemberDaoOracle implements IMemberDao {
 
 				}
 			}
-	
+
 			if (StringUtils.isNotBlank(searchVO.getSearchJob())) {
 				sb.append("  and mem_job = ?  ");
 			}
-			
+
 			sb.append("ORDER BY mem_id ASC ");
-            sb.append(" )a                         ");
-            sb.append(" where rownum <= ?          ");
-            sb.append(" )b                         ");
-            sb.append(" where rnum between ? and ? ");
-                
-			
-			
-			
-			
+			sb.append(CommonSQL.POST_PAGEING_QRY);
+
 			System.out.println(sb.toString());
 			pstmt = conn.prepareStatement(sb.toString());
 			int idx = 1;
-			if (StringUtils.isNotBlank(searchVO.getSearchWord())
-					&& StringUtils.isNotBlank(searchVO.getSearchWord()))		{
-				if(searchVO.getSearchType().equals("ADD")) {
-						pstmt.setString(idx++, searchVO.getSearchWord());
-						pstmt.setString(idx++, searchVO.getSearchWord());
+			if (StringUtils.isNotBlank(searchVO.getSearchWord()) && StringUtils.isNotBlank(searchVO.getSearchWord())) {
+				if (searchVO.getSearchType().equals("ADD")) {
+					pstmt.setString(idx++, searchVO.getSearchWord());
+					pstmt.setString(idx++, searchVO.getSearchWord());
 				}
 				pstmt.setString(idx++, searchVO.getSearchWord());
-				
+
 			}
 
 			if (StringUtils.isNotBlank(searchVO.getSearchJob())) {
@@ -399,7 +383,6 @@ public class MemberDaoOracle implements IMemberDao {
 
 			pstmt = conn.prepareStatement(sb.toString());
 
-
 			pstmt.setString(1, member.getMemPass());
 			pstmt.setString(2, member.getMemName());
 			pstmt.setString(3, member.getMemRegno1());
@@ -416,10 +399,9 @@ public class MemberDaoOracle implements IMemberDao {
 			pstmt.setString(14, member.getMemPass());
 
 			int cnt = pstmt.executeUpdate();
-			
+
 			System.out.println(pstmt);
-			
-			
+
 			return cnt;
 
 		} catch (Exception e) {
@@ -461,7 +443,7 @@ public class MemberDaoOracle implements IMemberDao {
 			sb.append("    SET mem_del_yn = 'Y' ");
 			sb.append("  WHERE mem_id = ? ");
 			sb.append("    and mem_pass = ? ");
-			
+
 			pstmt = conn.prepareStatement(sb.toString());
 			pstmt.setString(1, member.getMemId());
 			pstmt.setString(2, member.getMemPass());
@@ -470,11 +452,6 @@ public class MemberDaoOracle implements IMemberDao {
 
 			return cnt;
 
-			
-			
-			
-			
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -500,5 +477,4 @@ public class MemberDaoOracle implements IMemberDao {
 
 	}
 
-	
 }
