@@ -84,7 +84,7 @@ function fn_recordCountPerPage_Change() {
 				<form name="frm_search" action="freeList.jsp" method="get"
 					class="form-horizontal">
 					<input type="text" name="currentPageNo"
-						value="${searchVO.currentPageNo }"> <input type="text"
+						value="${search.currentPageNo }"> <input type="text"
 						name="recordCountPerPage" value="${searchVO.recordCountPerPage }">
 					<div class="form-group">
 						<label for="id_searchType" class="col-sm-2 control-label">검색</label>
