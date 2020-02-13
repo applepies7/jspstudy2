@@ -64,11 +64,11 @@ table.grid th {
 							<select id="id_searchType" name="searchType"
 								class="form-control input-sm">
 								<option value="">-- 선택 --</option>
-								<option value="T"
+								<option value="ID"
 									${"ID" eq search.searchType ? 'selected="selected"' : ""}>ID</option>
-								<option value="W"
+								<option value="NAME"
 									${"W" eq search.searchType ? 'selected="selected"' : ""}>이름</option>
-								<option value="C"
+								<option value="ADD"
 									${"ADD" eq search.searchType ? 'selected="selected"' : ""}>주소</option>
 							</select>
 						</div>

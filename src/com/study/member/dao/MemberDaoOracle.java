@@ -36,7 +36,7 @@ public class MemberDaoOracle implements IMemberDao {
 				case "ID":
 					sb.append("  and mem_id like '%'|| ? ||'%'  ");
 					break;
-				case "W":
+				case "NAME":
 					sb.append("  and mem_name like '%'|| ? ||'%'  ");
 					break;
 				case "ADD":
