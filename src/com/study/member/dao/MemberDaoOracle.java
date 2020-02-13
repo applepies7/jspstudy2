@@ -133,6 +133,10 @@ public class MemberDaoOracle implements IMemberDao {
 					sb.append("  and (mem_add1 like '%'|| ? ||'%' or mem_add2 like '%'|| ? ||'%'  ");
 					break;
 
+					
+					
+					
+					
 				}
 			}
 
